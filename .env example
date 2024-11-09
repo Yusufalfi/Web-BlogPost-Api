@@ -1,0 +1,10 @@
+PORT=8000
+CONNECTION_URL =mongodb://localhost:27017/blog-db
+
+JWT_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6Ill1c3VmIiwiZW1haWwiOiJ5dXN1ZkBnbWFpbC5jb20ifQ.no5L-cEOBS3fmFwc0MKcmJ1vV_px43V-qY7DB_0TUVs
+SENDER_EMAIL = YourEmail
+EMAIL_PASSWORD = your password
+AWS_ACCESS_KEY= your aws aceess key
+AWS_SECRET_KEY= your aws secret key
+AWS_BUCKET_NAME= your aws bucket name
+AWS_REGION= your aws region
