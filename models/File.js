@@ -2,11 +2,11 @@
 const mongoose = require("mongoose");
 
 const fileSchema = mongoose.Schema({
-    key: {type:String, require: true},
+    key: {type:String, required: true},
     size: Number,
     mimetype: String,
     createdBy: {type: mongoose.Types.ObjectId, ref:"user"} //relation to user
-}, {timestamp: true});
+}, {timestamps: true});
 
 const File = mongoose.model("file", fileSchema);
 module.exports = File;

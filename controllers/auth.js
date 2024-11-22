@@ -1,4 +1,4 @@
-const {User} = require("../models")
+const {User, File} = require("../models")
 const hashPassword = require("../utils/hashPassword");
 const comparePassword = require("../utils/comparePassword")
 const generateToken = require("../utils/generateToken")
@@ -258,7 +258,7 @@ const changePassword = async(req,res,next) => {
 const updateProfile = async(req,res,next) => {
   try {
     const {_id}= req.user;
-    const {name,email} = req.body;
+    const {name,email, profilePic} = req.body;
     
     //data berikut jangan di tampilkan (-password -verificationCode -forgotPasswordCode)
     const user = await User.findById(_id).select("-password -verificationCode -forgotPasswordCode");
@@ -275,9 +275,19 @@ const updateProfile = async(req,res,next) => {
       }
     }
 
+
+    if(profilePic) {
+      const file = await File.findById(profilePic);
+      if(!file) {
+         res.code = 400;
+        throw new Error("File Not Found")
+      }
+    }
+
     // change current Name
     user.name = name ? name : user.name;
     user.email = email ? email : user.email;
+    user.profilePic = profilePic;
 
     //update column isVerified on db
     if(email) {
@@ -300,6 +310,31 @@ const updateProfile = async(req,res,next) => {
   }
 }
 
+const currentUser = async(req,res,next) => {
+  try {
+    const {_id} = req.user;
+
+    const user =  await User.findById(_id)
+                            .select("-password -verificationCode -forgotPasswordCode")
+                            .populate("profilePic")
+    if(!user) {
+      res.code = 404;
+      throw new Error("User Not Found")
+    }
+
+    res.status(200).json({
+      code: 200,
+      status: true,
+      message: "Success Get Current User",
+      data : {
+        user
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   signup,
   signIn,
@@ -308,5 +343,6 @@ module.exports = {
   forgotPassword,
   recoveryPassword,
   changePassword,
-  updateProfile
+  updateProfile,
+  currentUser
 };
